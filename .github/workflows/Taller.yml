@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+
       - name: SSH Taller2-ElectuvaIII
         env:
           PRIVATE_KEY: "${{ secrets.SSH_PRIVATE_KEY }}"
@@ -23,14 +24,14 @@ jobs:
           mkdir -p ~/.ssh
 
           # Write key to file and set proper permissions
-          echo "$PRIVATE_KEY" > ~/.ssh/mi_llave_privada
-          chmod 600 ~/.ssh/mi_llave_privada
+          echo "$PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
 
           # Add host to known hosts
           ssh-keyscan -H ${HOST_NAME} >> ~/.ssh/known_hosts
 
           # Use -T flag to disable pseudo-terminal allocation
-          ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/mi_llave_privada ${USER_NAME}@${HOST_NAME} <<EOF
+          ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key ${USER_NAME}@${HOST_NAME} <<EOF
             if [ ! -d "${PROJECT_PATH}/.git" ]; then
               mkdir -p \$(dirname ${PROJECT_PATH})
               git clone ${GIT_REPO} ${PROJECT_PATH}
